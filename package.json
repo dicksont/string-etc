@@ -1,0 +1,29 @@
+{
+  "name": "string-etc",
+  "version": "0.0.0",
+  "description": "Collection of supplementary JavaScript String methods that works across module packaging systems and that can be included piece-wise ",
+  "main": "node/loader.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/test_cram.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dicksont/string-etc.git"
+  },
+  "keywords": [
+    "string",
+    "extension",
+    "util",
+    "shorten",
+    "cram"
+  ],
+  "author": "Dickson Tam <dicksont650@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dicksont/string-etc/issues"
+  },
+  "homepage": "https://github.com/dicksont/string-etc#readme"
+}
