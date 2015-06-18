@@ -76,5 +76,31 @@ describe('String.prototype.cram', function() {
     });
   })
 
+  describe('replacement', function() {
+    it("'California'.cram(8, {replacement: '.*'}) == 'Califo.*'", function() {
+      assert.equal('California'.cram(8, { replacement: '.*'}), 'Califo.*');
+    });
+
+    it("'California'.cram(8, {location: 'head', replacement: '.*'}) == '.*fornia'", function() {
+      assert.equal('California'.cram(8, { location: 'head', replacement: '.*'}), '.*fornia');
+    });
+
+    it("'California'.cram(8, {location: 'body', replacement: '.*'}) == 'Cal.*nia'", function() {
+      assert.equal('California'.cram(8, { location: 'body', replacement: '.*'}), 'Cal.*nia');
+    });
+
+    it("'California'.cram(8, {replacement: ''}) == 'Californ", function() {
+      assert.equal('California'.cram(8, { replacement: ''}), 'Californ');
+    });
+
+    it("'California'.cram(8, {location: 'head', replacement: ''}) == 'lifornia'", function() {
+      assert.equal('California'.cram(8, { location: 'head', replacement: ''}), 'lifornia');
+    });
+
+    it("'California'.cram(8, {location: 'body', replacement: ''}) == 'Calirnia'", function() {
+      assert.equal('California'.cram(8, { location: 'body', replacement: ''}), 'Calirnia');
+    });
+  })
+
 
 });
