@@ -24,83 +24,99 @@
  *
  */
 
-var assert = require('assert');
+ (function(factory) {
 
-describe('String.prototype.cram', function() {
-  before(function() {
-    var strload = require('../node/loader.js');
-    strload(['cram']);
-  });
+   var arrayFactory, assert;
 
-  describe('--', function() {
-    it("''.cram(8) == ''", function() {
-      assert.equal(''.cram(8), '')
-    });
+   if (typeof module !== 'undefined' && module && module.exports) { // Node.js & CommonJS
+     createWrapper = function() { return require('../node/wrapper.js')('cram'); }
+     assert = require('assert');
+   } else {
+     assert = window.assert;
+     createWrapper = function() {
+       return function(obj) {
+         return obj;
+       }
+     }
+   }
 
-    it("' '.cram(8) == ' '", function() {
-      assert.equal(' '.cram(8), ' ')
-    });
+   factory(assert, createWrapper);
 
-    it("'a'.cram(8) == 'a'", function() {
-      assert.equal('a'.cram(8), 'a')
-    });
+ })(function(assert, createWrapper) {
+   describe('String.prototype.cram', function() {
+     var string;
+     before(function() {
+       string = createWrapper();
+     });
 
-    it("'password'.cram(8) == 'password'", function() {
-      assert.equal('password'.cram(8), 'password')
-    });
+     describe('--', function() {
+       it("''.cram(8) == ''", function() {
+         assert.equal(string('').cram(8), '')
+       });
 
-    it("'password'.cram(5) == 'pass…'", function() {
-      assert.equal('pass…'.cram(8), 'pass…')
-    });
+       it("' '.cram(8) == ' '", function() {
+         assert.equal(string(' ').cram(8), ' ')
+       });
 
-    it("'California'.cram(8) == 'Califor…'", function() {
-      assert.equal('California'.cram(8), 'Califor…')
-    });
+       it("'a'.cram(8) == 'a'", function() {
+         assert.equal(string('a').cram(8), 'a')
+       });
 
-    it("'California'.cram(20) == 'California'", function() {
-      assert.equal('California'.cram(20), 'California')
-    });
-  })
+       it("'password'.cram(8) == 'password'", function() {
+         assert.equal(string('password').cram(8), 'password')
+       });
 
-  describe('location', function() {
-    it ("'California'.cram(8, { location: 'tail'}) == 'Califor…'", function() {
-      assert.equal('California'.cram(8, { location: 'tail' }), 'Califor…');
-    });
+       it("'password'.cram(5) == 'pass…'", function() {
+         assert.equal(string('pass…').cram(8), 'pass…')
+       });
 
-    it("'California'.cram(8, { location: 'body' }) == 'Cali…nia'", function() {
-      assert.equal('California'.cram(8, { location: 'body' }), 'Cali…nia');
-    });
+       it("'California'.cram(8) == 'Califor…'", function() {
+         assert.equal(string('California').cram(8), 'Califor…')
+       });
 
-    it ("'California'.cram(8, { location: 'head'}) == '…ifornia'", function() {
-      assert.equal('California'.cram(8, { location: 'head' }), '…ifornia');
-    });
-  })
+       it("'California'.cram(20) == 'California'", function() {
+         assert.equal(string('California').cram(20), 'California')
+       });
+     })
 
-  describe('replacement', function() {
-    it("'California'.cram(8, {replacement: '.*'}) == 'Califo.*'", function() {
-      assert.equal('California'.cram(8, { replacement: '.*'}), 'Califo.*');
-    });
+     describe('location', function() {
+       it ("'California'.cram(8, { location: 'tail'}) == 'Califor…'", function() {
+         assert.equal(string('California').cram(8, { location: 'tail' }), 'Califor…');
+       });
 
-    it("'California'.cram(8, {location: 'head', replacement: '.*'}) == '.*fornia'", function() {
-      assert.equal('California'.cram(8, { location: 'head', replacement: '.*'}), '.*fornia');
-    });
+       it("'California'.cram(8, { location: 'body' }) == 'Cali…nia'", function() {
+         assert.equal(string('California').cram(8, { location: 'body' }), 'Cali…nia');
+       });
 
-    it("'California'.cram(8, {location: 'body', replacement: '.*'}) == 'Cal.*nia'", function() {
-      assert.equal('California'.cram(8, { location: 'body', replacement: '.*'}), 'Cal.*nia');
-    });
+       it ("'California'.cram(8, { location: 'head'}) == '…ifornia'", function() {
+         assert.equal(string('California').cram(8, { location: 'head' }), '…ifornia');
+       });
+     })
 
-    it("'California'.cram(8, {replacement: ''}) == 'Californ", function() {
-      assert.equal('California'.cram(8, { replacement: ''}), 'Californ');
-    });
+     describe('replacement', function() {
+       it("'California'.cram(8, {replacement: '.*'}) == 'Califo.*'", function() {
+         assert.equal(string('California').cram(8, { replacement: '.*'}), 'Califo.*');
+       });
 
-    it("'California'.cram(8, {location: 'head', replacement: ''}) == 'lifornia'", function() {
-      assert.equal('California'.cram(8, { location: 'head', replacement: ''}), 'lifornia');
-    });
+       it("'California'.cram(8, {location: 'head', replacement: '.*'}) == '.*fornia'", function() {
+         assert.equal(string('California').cram(8, { location: 'head', replacement: '.*'}), '.*fornia');
+       });
 
-    it("'California'.cram(8, {location: 'body', replacement: ''}) == 'Calirnia'", function() {
-      assert.equal('California'.cram(8, { location: 'body', replacement: ''}), 'Calirnia');
-    });
-  })
+       it("'California'.cram(8, {location: 'body', replacement: '.*'}) == 'Cal.*nia'", function() {
+         assert.equal(string('California').cram(8, { location: 'body', replacement: '.*'}), 'Cal.*nia');
+       });
 
+       it("'California'.cram(8, {replacement: ''}) == 'Californ", function() {
+         assert.equal(string('California').cram(8, { replacement: ''}), 'Californ');
+       });
 
+       it("'California'.cram(8, {location: 'head', replacement: ''}) == 'lifornia'", function() {
+         assert.equal(string('California').cram(8, { location: 'head', replacement: ''}), 'lifornia');
+       });
+
+       it("'California'.cram(8, {location: 'body', replacement: ''}) == 'Calirnia'", function() {
+         assert.equal(string('California').cram(8, { location: 'body', replacement: ''}), 'Calirnia');
+       });
+     })
+   })
 });

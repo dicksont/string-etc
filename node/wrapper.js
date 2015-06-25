@@ -24,32 +24,51 @@
  *
  */
 
-var libmap = {
+var fxmap = {
   'cram' : '../lib/cram.js',
 }
 
-function loadSingle(lib) {
-  var path = libmap[lib];
-  if (!path) return;
 
-  var abspath = require.resolve(path);
+module.exports = function(fxlist) {
+  var methods = {};
+  var Wrapper = function(str) {
 
-  delete require.cache[abspath]; // Force reload
-  require(path);
-}
+    if (!(typeof(str) == 'string'))
+      throw new Error('string-etc: First argument(' + str + ') of initializer must be an array');
 
-function loadArray(libarr) {
-  for (var i=0; i < libarr.length; i++) {
-    loadSingle(libarr[i]);
+    for(fx in methods) {
+      Wrapper[fx] = methods[fx].bind(str);
+    }
+
+    Wrapper.length = str.length;
+
+    return Wrapper;
   }
-}
 
-module.exports = function(lib) {
-  if (typeof(lib) == "string") {
-    loadSingle(lib);
-  } else if (lib instanceof Array) {
-    loadArray(lib);
-  } else {
-    throw new Error('array-etc: Parameter lib neither a String nor Array.');
+
+
+  function importMethod(fx) {
+
+    var path = fxmap[fx];
+
+    if (!path) return;
+
+    var abspath = require.resolve(path);
+
+    delete require.cache[abspath]; // Force reload
+
+    methods[fx] = require(path);
+    Wrapper[fx] = methods[fx];
   }
+
+  if (typeof(fxlist) == "string") {
+    fxlist = [ fxlist ];
+  }
+
+  fxlist.map(function(fx) {
+    importMethod(fx)
+  });
+
+
+  return Wrapper;
 }
