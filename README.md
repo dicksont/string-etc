@@ -24,7 +24,7 @@ where *string* is a constructed function that wraps around the *string* on which
 var string = require('array-etc')(['cram']);
 ```
 
-This extra wrapper is a special arrangement we added on Node, in order to avoid global conflicts with the *Array.prototype* object. We may have other libraries or other versions of this library in our dependency tree. These might add methods to the *Array.prototype* object that we are not aware. We must attach the methods locally to a wrapping function to avoid these potential collisions.
+This extra wrapper is a special arrangement we added on Node, in order to avoid global conflicts with the *String.prototype* object. We may have other libraries or other versions of this library in our dependency tree. Unbeknownst to us, these libraries may add methods of similar names to the *String.prototype* object. We must attach the methods locally to a wrapping function to avoid these potential collisions.
 
 Since unintentional collisions are a lot harder on Browser or with AMD, where the end developer actively controls the loading of the modules, we have not seen a case for extending the wrapping function to these systems.
 
