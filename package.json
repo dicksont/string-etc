@@ -1,6 +1,6 @@
 {
   "name": "string-etc",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Collection of supplementary JavaScript String methods that works across module packaging systems and that can be included piece-wise ",
   "main": "node/etc.js",
   "directories": {
