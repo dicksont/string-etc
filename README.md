@@ -6,13 +6,16 @@ A collection of handy String methods that works across the various JavaScript pa
 Methods can be included piecewise. E-mail me if you find a String method that you think should be included because it would be useful for other people as well.
 
 ## Usage
+### Web page
 Accessing these extensions will differ depending on our module system. If we are on *Browser* or *AMD*, we can access these methods directly from an *String* object. For example, we can do:
 
 ```javascript
 'California'.cram(8) // returns Califor…
 ```
 
-However, if we are on *CommonJS/Node*, we have to access these methods through a wrapper. So instead of the call above, we would have:
+### Node wrapper
+
+However, if we are on *CommonJS/Node*, we can access these methods through a wrapper. So instead of the call above, we would have:
 
 ```javascript
 string('California').cram(8) // returns Califor…
@@ -21,13 +24,24 @@ string('California').cram(8) // returns Califor…
 where *string* is a constructed function that wraps around the *string* on which we want to operate:
 
 ```javascript
-var string = require('array-etc')(['cram']);
+var string = require('array-etc').wrap(['cram']);
 ```
 
-This extra wrapper is a special arrangement we added on Node, in order to avoid global conflicts with the *String.prototype* object. We may have other libraries or other versions of this library in our dependency tree. Unbeknownst to us, these libraries may add methods of similar names to the *String.prototype* object. We must attach the methods locally to a wrapping function to avoid these potential collisions.
+This extra wrapper is a special arrangement we added on Node, in order to avoid global conflicts with the *String.prototype* object. We may have other libraries or other versions of this library in our dependency tree. Unbeknownst to us, these libraries may add methods of similar names to the *String.prototype* object. We can attach the methods locally to a wrapping function to avoid these potential collisions.
 
-Since unintentional collisions are a lot harder on Browser or with AMD, where the end developer actively controls the loading of the modules, we have not seen a case for extending the wrapping function to these systems.
+Since unintentional collisions are a lot harder with script tag loads or AMD, where the end developer actively controls the loading of the modules, we have not seen a case for extending the wrapping function to these systems.
 
+### Node loader
+
+Using a wrapper on Node ensures safety. However, it does introduce a speed bump in that a extra function call must be required before the string can be operated. Calls to library methods with a single source string would require nesting.
+
+If safety is not an issue, you can use the direct syntax in Node as well with a loader call. For example:
+
+```javascript
+require('array-etc').load(['cram']);
+```
+
+This will load **cram** into **String.prototype**
 
 ## Installation
 ### Web page
@@ -53,10 +67,12 @@ In your shell, run
 npm install string-etc
 ```
 
-In your file, write
+In your file, require the library, and call wrap with the methods you want your wrapper have. For example:
 ```javascript
-var strload = require('string-etc');
-var string = strload(['cram']);
+var string = require('string-etc').wrap(['cram']);
 ```
 
-This creates a custom wrapper function, which you can use to access the individual methods.
+Or if you prefer the direct syntax without wrapping:
+```javascript
+require('string-etc').load(['cram']);
+```
