@@ -24,52 +24,22 @@
  *
  */
 
-var fxmap = {
-  'cram' : '../lib/cram.js',
-  'pad' : '../lib/pad.js'
-}
+ var assert = require('assert');
+ var load = require('../node/etc.js').load;
 
+ describe('Loader', function() {
 
-module.exports = function(fxlist) {
-  var methods = {};
-  var Wrapper = function(str) {
+   it('can import library via string', function() {
+     load('cram');
+     assert.ok(String.prototype.hasOwnProperty('cram'));
+     delete String.prototype.cram;
+     assert.ok(!String.prototype.hasOwnProperty('cram'));
+   })
 
-    if (!(typeof(str) == 'string'))
-      throw new Error('string-etc: First argument(' + str + ') of initializer must be an array');
-
-    for(fx in methods) {
-      Wrapper[fx] = methods[fx].bind(str);
-    }
-
-    Wrapper.length = str.length;
-
-    return Wrapper;
-  }
-
-
-
-  function importMethod(fx) {
-
-    var path = fxmap[fx];
-
-    if (!path) return;
-
-    var abspath = require.resolve(path);
-
-    delete require.cache[abspath]; // Force reload
-
-    methods[fx] = require(path);
-    Wrapper[fx] = methods[fx];
-  }
-
-  if (typeof(fxlist) == "string") {
-    fxlist = [ fxlist ];
-  }
-
-  fxlist.map(function(fx) {
-    importMethod(fx)
-  });
-
-
-  return Wrapper;
-}
+   it('can import libraries via Array', function() {
+     load(['cram']);
+     assert.ok(String.prototype.hasOwnProperty('cram'));
+     delete String.prototype.cram;
+     assert.ok(!String.prototype.hasOwnProperty('cram'));
+   })
+ })

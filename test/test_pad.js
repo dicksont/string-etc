@@ -27,7 +27,7 @@
  (function(factory) {
 
    if (typeof module !== 'undefined' && module && module.exports) { // Node.js & CommonJS
-     factory(require('assert'), function() { return require('../node/wrapper.js')('pad'); });
+     factory(require('assert'), function() { return require('../node/etc.js').wrap('pad'); });
    } else {
      factory(window.assert, function() { return function(obj) { return obj; } });
      mocha.checkLeaks();
@@ -68,11 +68,11 @@
       var string = createWrapper();
 
       it("'abc'.pad(5, { location: 'head'}) == '  abc'", function() {
-        assert.equal('abc'.pad(5, { location: 'head'}), '  abc');
+        assert.equal(string('abc').pad(5, { location: 'head'}), '  abc');
       });
 
       it("'abc'.pad(5, { location: 'tail'}) == 'abc  '", function() {
-        assert.equal('abc'.pad(5, { location: 'tail'}), 'abc  ');
+        assert.equal(string('abc').pad(5, { location: 'tail'}), 'abc  ');
       });
     });
 

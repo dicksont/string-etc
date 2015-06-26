@@ -24,22 +24,59 @@
  *
  */
 
-var assert = require('assert');
-var fawrap = require('../node/etc.js').wrap;
+var fxmap = {
+  'cram' : '../lib/cram.js',
+  'pad' : '../lib/pad.js'
+}
 
-describe('Wrapper', function() {
+function importMethods(fx, target) {
 
-  it('can import library via string', function() {
-    var wrapper = fawrap('cram');
-    assert.ok(wrapper.hasOwnProperty('cram'));
-    delete wrapper.cram;
-    assert.ok(!wrapper.hasOwnProperty('cram'));
-  })
+  if (fx instanceof Array) {
+    return fx.map(function(fx) {
+      importMethods(fx, target);
+    });
+  }
 
-  it('can import libraries via Array', function() {
-    var wrapper = fawrap(['cram']);
-    assert.ok(wrapper.hasOwnProperty('cram'));
-    delete wrapper.cram;
-    assert.ok(!wrapper.hasOwnProperty('cram'));
-  })
-})
+  var path = fxmap[fx];
+
+  if (!path) return;
+
+  var abspath = require.resolve(path);
+
+  delete require.cache[abspath]; // Force reload
+
+  target = (target instanceof Array)? target : [ target ];
+
+  target.map(function(obj) {
+    obj[fx] = require(path);
+  });
+
+}
+
+function createWrapper(fxlist) {
+  var methods = {};
+  var Wrapper = function(str) {
+
+    if (!(typeof(str) == 'string'))
+      throw new Error('string-etc: First argument(' + str + ') of initializer must be an array');
+
+    for(fx in methods) {
+      Wrapper[fx] = methods[fx].bind(str);
+    }
+
+    return Wrapper;
+  }
+
+  importMethods(fxlist, [ methods, Wrapper ]);
+
+  return Wrapper;
+}
+
+function loadToString(fxlist) {
+  importMethods(fxlist, String.prototype);
+}
+
+module.exports = {
+  wrap: createWrapper,
+  load: loadToString
+}
