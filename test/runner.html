@@ -5,9 +5,33 @@
   <meta charset="utf-8">
   <title>Test Runner for Array-Etc</title>
   <link rel="stylesheet" href="/node_modules/mocha/mocha.css"/>
+  <style>
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+label {
+  font-size: 12px;
+  color: #666;
+  margin-right: 6px;
+}
+
+#div_testsuite {
+  margin: 9px 9px;
+}
+
+  </style>
 </head>
 
 <body>
+  <div id="div_testsuite">
+    <label>Select Test Suite</label>
+    <select id="select_testsuite">
+      <option value="cram">Cram</option>
+      <option value="pad">Pad</option>
+    </select>
+  </div>
   <div id="mocha"></div>
   <script src="/node_modules/chai/chai.js"></script>
   <script src="/node_modules/mocha/mocha.js"></script>
@@ -15,12 +39,65 @@
     window.assert = chai.assert;
     mocha.setup('bdd');
   </script>
-  <script src="/lib/cram.js"></script>
-  <script src="/test/test_cram.js"></script>
+
   <script>
-  mocha.checkLeaks();
-  mocha.run();
-</script>
+
+    var libpath = {
+      'cram' : '/lib/cram.js',
+      'pad' : '/lib/pad.js'
+    }
+
+    var testpath = {
+      'cram' : '/test/test_cram.js',
+      'pad' : '/test/test_pad.js'
+    }
+
+    location.getParameterByName = function(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+          results = regex.exec(this.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function loadBrowserScripts(scripts) {
+
+      if (!scripts) {
+        return;
+      } else if (!Array.isArray(scripts)) {
+        loadBrowserScripts(new Array(scripts));
+      } else if (scripts.length == 0) {
+        return;
+      } else {
+        var script = scripts.shift();
+        var scriptel = document.createElement('script');
+        scriptel.setAttribute('src', script);
+        scriptel.type = "text/javascript";
+        scriptel.async = false;
+        document.body.appendChild(scriptel);
+        loadBrowserScripts(scripts);
+      }
+    }
+
+    function loadTestSuite(lib) {
+      lib = (libpath.hasOwnProperty(lib))? lib : 'cram';
+      loadBrowserScripts([ libpath[lib], testpath[lib] ]);
+    }
+
+    var q = location.getParameterByName('q');
+
+    if (!libpath.hasOwnProperty(q)) {
+      window.location.href = "?q=cram";
+    }
+
+    document.querySelector('select').value = q;
+    loadTestSuite(q);
+
+    document.querySelector('select').addEventListener('change', function() {
+      window.location.href = '?q=' + this.value;
+    });
+
+
+  </script>
 </body>
 
 </html>

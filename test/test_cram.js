@@ -26,21 +26,13 @@
 
  (function(factory) {
 
-   var arrayFactory, assert;
-
    if (typeof module !== 'undefined' && module && module.exports) { // Node.js & CommonJS
-     createWrapper = function() { return require('../node/wrapper.js')('cram'); }
-     assert = require('assert');
+     factory(require('assert'), function() { return require('../node/wrapper.js')('cram'); });
    } else {
-     assert = window.assert;
-     createWrapper = function() {
-       return function(obj) {
-         return obj;
-       }
-     }
+     factory(window.assert, function() { return function(obj) { return obj; } });
+     mocha.checkLeaks();
+     mocha.run();
    }
-
-   factory(assert, createWrapper);
 
  })(function(assert, createWrapper) {
    describe('String.prototype.cram', function() {
