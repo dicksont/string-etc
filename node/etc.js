@@ -25,15 +25,16 @@
  */
 
 var fxmap = {
+  'chunk' : '../lib/chunk.js',
   'cram' : '../lib/cram.js',
-  'pad' : '../lib/pad.js'
+  'pad' : '../lib/pad.js',
 }
 
-function importMethods(fx, target) {
+function importMethods(target, fx) {
 
   if (fx instanceof Array) {
     return fx.map(function(fx) {
-      importMethods(fx, target);
+      importMethods(target, fx);
     });
   }
 
@@ -67,16 +68,12 @@ function createWrapper(fxlist) {
     return Wrapper;
   }
 
-  importMethods(fxlist, [ methods, Wrapper ]);
+  importMethods([ methods, Wrapper ], fxlist);
 
   return Wrapper;
 }
 
-function loadToString(fxlist) {
-  importMethods(fxlist, String.prototype);
-}
-
 module.exports = {
   wrap: createWrapper,
-  load: loadToString
+  load: importMethods.bind(undefined, String.prototype)
 }
