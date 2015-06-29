@@ -43,6 +43,7 @@ label {
   <script>
 
     var libpath = {
+      'chunk' : [ '/node_modules/array-etc/lib/equals.js', '/lib/chunk.js' ],
       'cram' : '/lib/cram.js',
       'pad' : '/lib/pad.js'
     }
@@ -69,6 +70,10 @@ label {
         return;
       } else {
         var script = scripts.shift();
+
+        if (script instanceof Array)
+          return loadBrowserScripts(scripts);
+
         var scriptel = document.createElement('script');
         scriptel.setAttribute('src', script);
         scriptel.type = "text/javascript";

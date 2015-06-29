@@ -7,10 +7,11 @@
     "test": "test"
   },
   "devDependencies": {
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "array-etc": "~0.1.1"
   },
   "scripts": {
-    "test": "mocha test/test_wrapper.js test/test_loader.js test/test_cram.js test/test_pad.js"
+    "test": "mocha test/test_wrapper.js test/test_loader.js test/test_cram.js test/test_pad.js test/test_chunk.js"
   },
   "repository": {
     "type": "git",
