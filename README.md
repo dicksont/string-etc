@@ -6,8 +6,10 @@ A collection of handy String methods that works across the various JavaScript pa
 Methods can be included piecewise. E-mail me if you find a String method that you think should be included because it would be useful for other people as well.
 
 ## Usage
+Accessing these extensions will differ depending on our module system.
+
 ### Web page
-Accessing these extensions will differ depending on our module system. If we are on *Browser* or *AMD*, we can access these methods directly from an *String* object. For example, we can do:
+If we are on *Browser* or *AMD*, we can access these methods directly from an *String* object. For example, we can do:
 
 ```javascript
 'California'.cram(8) // returns Califor…
@@ -33,7 +35,7 @@ Since unintentional collisions are a lot harder with script tag loads or AMD, wh
 
 ### Node loader
 
-Using a wrapper on Node ensures safety. However, it does introduce a speed bump in that a extra function call must be required before the string can be operated. Calls to library methods with a single source string would require nesting.
+Using a wrapper on Node ensures safety. However, it does introduce a speed bump in that a extra function call must be required before the string can be operated. 
 
 If safety is not an issue, you can use the direct syntax in Node as well with a loader call. For example:
 
@@ -76,3 +78,7 @@ Or if you prefer the direct syntax without wrapping:
 ```javascript
 require('string-etc').load(['cram']);
 ```
+
+## Libraries
+### lib/cram.js
+Cram takes a string and shortens it, by replacing
