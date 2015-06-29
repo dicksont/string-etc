@@ -27,9 +27,9 @@
  (function(factory) {
 
    if (typeof module !== 'undefined' && module && module.exports) { // Node.js & CommonJS
-     factory(require('assert'), function() { return require('../node/etc.js').wrap('cram'); });
+     factory(require('assert'), function() { return require('../node/etc.js').wrap('cram') });
    } else {
-     factory(window.assert, function() { return function(obj) { return obj; } });
+     factory(window.assert, function() { return function(obj) { return obj } });
      mocha.checkLeaks();
      mocha.run();
    }

@@ -27,9 +27,9 @@
  (function(factory) {
 
    if (typeof module !== 'undefined' && module && module.exports) { // Node.js & CommonJS
-     factory(require('assert'), function() { return require('../node/etc.js').wrap('pad'); });
+     factory(require('assert'), function() { return require('../node/etc.js').wrap('pad') });
    } else {
-     factory(window.assert, function() { return function(obj) { return obj; } });
+     factory(window.assert, function() { return function(obj) { return obj } });
      mocha.checkLeaks();
      mocha.run();
    }
