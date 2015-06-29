@@ -8,7 +8,8 @@
   },
   "devDependencies": {
     "mocha": "^2.2.4",
-    "array-etc": "~0.1.1"
+    "array-etc": "~0.1.1",
+    "chai": "^3.0.0"
   },
   "scripts": {
     "test": "mocha test/test_wrapper.js test/test_loader.js test/test_cram.js test/test_pad.js test/test_chunk.js"
