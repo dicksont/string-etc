@@ -24,7 +24,7 @@ If we are on *Browser* or *AMD*, we can access these methods directly from an *S
 
 However, this type of direct access may lead to conflicts on CommonJS systems like Node. Unlike AMD or web pages, libraries are automatically loaded in Node. We may have other libraries in our dependency tree that add similarly named methods to the same *String.prototype* object. When we call these methods, we may be in fact be calling the function that overwrote ours.
 
-We added a special arrangement on Node to prevent this problem. We create a local wrapper function. Instead, of attaching the methods to the global *String.prototype* object, we attach it to this function. We would have:
+We added a special arrangement on Node to prevent this problem. We create a local wrapper function. Instead, of attaching the methods to the global *String.prototype* object, we attach them to this function. We would have:
 
 ```javascript
 string('California').cram(8) // returns Califor…
@@ -40,9 +40,9 @@ Since these kind of unintended collisions are a lot harder with script tag loads
 
 ### Node loader
 
-The wrapper function on Node guarantees safety. However, it may be harder to work with. We need an extra function call for every string operation, and string operations cannot be chained as elegantly.
+The wrapper function on Node guarantees safety. However, it may be harder to manipulate. We need an extra function call for every string operation, and string operations cannot be chained as elegantly.
 
-If safety is not an issue, we can use the direct syntax in Node as well. We just need to call load instead of wrap in our setup.
+If safety is not an issue, we can use the direct syntax in Node as well. We just need to call *load* instead of *wrap* in our setup.
 
 For example:
 
@@ -54,12 +54,12 @@ will load **cram** into **String.prototype**
 
 ## Installation
 ### Web page
-If we use bower, we would need to run
+If we use bower, we would need to run:
 ```
 bower install string-etc
 ```
 
-If we use npm, we would need to run
+If we use npm, we would need to run:
 ```
 npm install string-etc
 ```
@@ -71,7 +71,7 @@ We then have to add the corresponding script tag to our page. e.g.
 ```
 
 ### Node
-In our shell, run
+In our shell, run:
 ```shell
 npm install string-etc
 ```
@@ -90,11 +90,12 @@ require('string-etc').load(['cram']);
 
 ## Libraries
 ### lib/cram.js
-Cram takes a string and shortens it, by replacing
+Cram tries to fit a string within a width, by replacing excess characters with an ellipsis:
 
 
 ## Technical Support
 
-E-mail me if you have problems or questions.
-
-E-mail me if you find a String method that you think should be included because it would be useful for other people as well.
+E-mail me:
+- if you have problems or questions.
+- if you find a String method that you think should be included, because it would be useful for others as well.
+- if you have an interesting use case that I should consider
