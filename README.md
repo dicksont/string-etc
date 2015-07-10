@@ -54,17 +54,17 @@ will load **cram** into **String.prototype**
 
 ## Installation
 ### Web page
-If we use bower, we would need to run:
+If we use Bower, we would run:
 ```
 bower install string-etc
 ```
 
-If we use npm, we would need to run:
+If we use npm, we would run:
 ```
 npm install string-etc
 ```
 
-We then have to add the corresponding script tag to our page. e.g.
+Then, we add the corresponding script tag to our page. e.g.
 
 ```html
 <script src="/bower_components/string-etc/lib/cram.js"></script>
