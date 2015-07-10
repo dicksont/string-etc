@@ -14,7 +14,7 @@ Methods can be included piecewise.
 Accessing these extensions will differ depending on our module system.
 
 ### HTML web page
-If we are on *Browser* or *AMD*, we can access these methods directly from an *String* object. For example, we can do:
+If we are on a vanilla web page or AMD, we can access these methods directly from an *String* object. For example, we can do:
 
 ```javascript
 'California'.cram(8) // returns Califor…
@@ -24,7 +24,7 @@ If we are on *Browser* or *AMD*, we can access these methods directly from an *S
 
 However, this type of direct access may lead to conflicts on CommonJS systems like Node. Unlike AMD or web pages, libraries are automatically loaded in Node. We may have other libraries in our dependency tree that add similarly named methods to the same *String.prototype* object. When we call these methods, we may be in fact be calling the function that overwrote ours.
 
-We added a special arrangement on Node to prevent this problem. We create a local wrapper function. Instead, of attaching the methods to the global *String.prototype* object, we attach them to this function. We would have:
+We added a special arrangement on Node to prevent this problem. We create a local wrapper function. Instead of attaching the methods to the global *String.prototype* object, we attach them to this function. We would have:
 
 ```javascript
 string('California').cram(8) // returns Califor…
@@ -83,14 +83,33 @@ Call wrap with the methods we desire. For example:
 var string = require('string-etc').wrap(['cram']);
 ```
 
-Or if we prefer the direct syntax without wrapping:
+Or call load if we prefer the direct syntax without wrapping:
 ```javascript
 require('string-etc').load(['cram']);
 ```
 
-## Libraries
+# Libraries
 ### lib/cram.js
-Cram tries to fit a string within a width, by replacing excess characters with an ellipsis:
+## String.prototype.cram(space, opts)
+Cram tries to fit a string within a given width, by replacing excess characters with an ellipsis:
+
+For example, suppose we are building a web page that indexes different Objective-C methods. Objective-C has some pretty long function names that might mess up our layout. Using cram, we can shorten these. Let's try a pretty bad case:
+
+```javascript
+"splitViewController:willHideViewController:withBarButtonItem:forPopoverController:".cram(); //"splitViewContro…"
+```
+
+By default, cram returns a string with max length 16. However, we can adjust this by passing in a number:
+
+```javascript
+"splitViewController:willHideViewController:withBarButtonItem:forPopoverController:".cram(8); //"splitVi…"
+```
+
+### opts.replacement
+The replacement character by default is an ellipsis, but you can use another string. Specify the replacement string, and cram will adjust accordingly.
+
+
+
 
 
 ## Technical Support
