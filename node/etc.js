@@ -62,7 +62,7 @@ function createWrapper(fxlist) {
       throw new Error('string-etc: First argument(' + str + ') of initializer must be an array');
 
     for(fx in methods) {
-      Wrapper[fx] = methods[fx].bind(str);
+      Wrapper[fx] = methods[fx].bind(undefined, str);
     }
 
     return Wrapper;
